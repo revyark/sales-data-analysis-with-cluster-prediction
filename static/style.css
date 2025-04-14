@@ -1,0 +1,79 @@
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.glow-card {
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3),
+                0 0 20px rgba(0, 200, 255, 0.2),
+                0 0 30px rgba(0, 150, 255, 0.1);
+    transition: all 0.4s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.glow-card:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6),
+                0 0 30px rgba(0, 200, 255, 0.4),
+                0 0 45px rgba(0, 150, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.glow-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.glow-card:hover::before {
+    left: 100%;
+}
+
+.alert-success {
+    background-color: #1a1a1a;
+    border: 1px solid #00ffc8;
+    color: #00ffc8;
+    box-shadow: 0 0 10px rgba(0, 255, 200, 0.3);
+    transition: all 0.3s ease;
+}
+
+.card {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.form-control {
+    background-color: #252525;
+    border: 1px solid #444;
+    color: #fff;
+}
+
+.form-control:focus {
+    background-color: #252525;
+    color: #fff;
+    border-color: #00ffc8;
+    box-shadow: 0 0 0 0.25rem rgba(0, 255, 200, 0.25);
+}
+
+.alert-success:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 200, 0.5);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); }
+    100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+}
+
+.glow-card.pulse {
+    animation: pulse 2s infinite;
+}
+  
