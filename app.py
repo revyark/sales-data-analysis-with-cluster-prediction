@@ -30,15 +30,15 @@ X_train_scaled = joblib.load('X_train_scaled.pkl')
 
 # Labels for clusters
 cluster_labels = {
-    0: 'Small Customer',
+    0: 'High value Occasional Buyer',
     1: 'Regular Customer',
-    2: 'Bulk Buyer',
-    3: 'High-Value Customer',
+    2: 'Small CUstomer',
+    3: 'Frequent Bulk Buyer',
     4: 'Moderate Buyer',
     5: 'Low-Value Regular Customer',
     6: 'Occasional Customer',
-    7: 'High-Value Occasional Buyer',
-    8: 'Frequent Small Buyer',
+    7: 'Occasional Buyer',
+    8: 'Occasional Bulk buyer',
     9: 'Inactive Customer'
 }
 
