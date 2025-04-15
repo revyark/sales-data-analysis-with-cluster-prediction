@@ -4,6 +4,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# Load Firebase credentials from environment variable
+firebase_config = os.environ.get('FIREBASE_CONFIG_JSON')
+
+# Parse the JSON string into a dictionary
+import json
+cred_dict = json.loads(firebase_config)
+cred = credentials.Certificate(cred_dict)
+firebase_admin.initialize_app(cred)
+
+# Initialize Firestore DB
+db = firestore.client()
 
 app = Flask(__name__)
 
@@ -50,9 +64,16 @@ def predict():
     pie_labels = [cluster_labels.get(i, f'Cluster {i}') for i in range(len(counts))]
     colors = ['#00ffff', '#00c8ff', '#0096ff']
 
+    from datetime import datetime
+
+    from datetime import datetime
+
+
     # Dark theme and glow style
     plt.style.use('dark_background')
     sns.set(style="whitegrid", rc={'axes.facecolor':'#121212', 'figure.facecolor':'#121212'})
+
+
 
     # Pie chart
     plt.figure(figsize=(6, 6), facecolor='#121212')
@@ -162,7 +183,37 @@ def predict():
     plt.savefig('static/hist_orderline.png', transparent=True)
     plt.close()
 
+    
+
+    # Store prediction result in Firebase Firestore
+    db.collection('predictions').add({
+        'quantity': quantity,
+        'orderline': orderline,
+        'cluster': int(cluster),
+        'meaning': meaning,
+        'timestamp': datetime.utcnow().isoformat()
+    })
     return render_template('result.html', cluster=cluster, meaning=meaning)
+
+@app.route('/dashboard')
+def dashboard():
+    # Retrieve all prediction documents
+    predictions_ref = db.collection('predictions')
+    docs = predictions_ref.order_by('timestamp', direction=firestore.Query.DESCENDING).stream()
+
+    # Format documents into a list of dictionaries
+    predictions = []
+    for doc in docs:
+        data = doc.to_dict()
+        predictions.append({
+            'quantity': data.get('quantity'),
+            'orderline': data.get('orderline'),
+            'cluster': data.get('cluster'),
+            'meaning': data.get('meaning'),
+            'timestamp': data.get('timestamp')
+        })
+
+    return render_template('dashboard.html', predictions=predictions)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
